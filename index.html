@@ -10,7 +10,12 @@
     #input {
       margin-bottom: auto !important;
     }
-    
+    .list-group-item{
+      border-top: none;
+      border-right: none;
+      border-left: none;
+      border-bottom: none;
+    }
   </style>
 </head>
 
@@ -26,19 +31,19 @@
     <main class="col-4">
       <article class="form-inline">
         <div class="form-group mx-sm-3 mb-2">
-          <label for="inputPassword2" class="sr-only">Password</label>
           <input type="text" class="form-control" id="inputPassword2" placeholder="Find a City">
           <button type="submit" class="btn btn-primary mb-2" id="input">Search</button>
         </div>
       </article>
       <p>
       <div class="col">
+        <button type="button" class="btn btn-danger" id="delete">Delete History</button>
         <ul class="list-group">
-          <li class="list-group-item">Cras justo odio</li>
-          <li class="list-group-item">Dapibus ac facilisis in</li>
-          <li class="list-group-item">Morbi leo risus</li>
-          <li class="list-group-item">Porta ac consectetur ac</li>
-          <li class="list-group-item">Vestibulum at eros</li>
+          <li class="list-group-item"></li>
+          <li class="list-group-item"></li>
+          <li class="list-group-item"></li>
+          <li class="list-group-item"></li>
+          <li class="list-group-item"></li>
         </ul>
       </div>
       </p>
