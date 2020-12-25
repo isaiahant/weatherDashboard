@@ -21,7 +21,7 @@ const getUVIndexRange = (val) => {
 const displayWeather = (city) => {
 
   
-  axios.get(`api.openweathermap.org/data/2.5/weather?q=${search}&appid=7405e1a609d490d0a6b23e2a2070ceea`)
+  axios.get(`api.openweathermap.org/data/2.5/weather?q=${city}&appid=7405e1a609d490d0a6b23e2a2070ceea`)
   .then(res => {
     let city = res.name
     let data = res.data
@@ -33,13 +33,12 @@ const displayWeather = (city) => {
       let current = data.current
       let unixTimeStamp = current.dt
       let date = new Date(unixTimeStamp * 1000)
-      let html = `<div class="card-body">
-      <p id="city">${city}</p>
-      <p id="temperature">${current.temp} F°</p>
-      <p id="Humidity">${current.humidity}%</p>
-      <p id="wind">${wind_speed}mph</p>
-      <p id="UV"> <span class="uvi uvi-${getUVIndexRange(current.uvi)}">${current.uvi}</span></p>
-      </div>`
+      let html = `<h1>${city} (${date.getMonth()}/${date.getDate()}/${date.getFullYear()})<img src="https://openweathermap.org/img/wn/${current.weather[0].icon}@2x.png" alt="${current.weather[0].icon}@2x.png">
+      </h1>
+        <p>Temperature: ${current.temp} °F</p>
+        <p>Humidity: ${current.humidity}%</p>
+        <p>Wind Speed: ${current.wind_speed} MPH</p>
+        <p>UV Index: <span class="uvi uvi-${getUVIndexRange(current.uvi)}">${current.uvi}</span></p>`
       document.getElementById('currentWeather').innerHTML = html
       html = ''
       
@@ -61,20 +60,18 @@ const displayWeather = (city) => {
       }
       document.getElementById('forecast').innerHTML = html
     })
-    .catch(err => console.error(err);)
+    .catch(err => console.error(err));
   })
-  .catch(err => console.error(err));
-})
 }
+
 
 const displaySearchHistory = () => {
   let list = document.getElementById('searchHistory')
   let html = ''
   let len = searchHistory.length - 1
-  for (let i = len; i < array.length; i++) {
-    const element = array i];
+  for (let i = len; i > -1; i--) {
     html += `<li>
-    <button type= "button" class="btn btn-outline-secondary" value="${searchHistory[i]}">${searchHistory{i}}</button>
+    <button type= "button" class="btn btn-outline-secondary" value="${searchHistory[i]}">${searchHistory[i]}</button>
     </li>`
   }
   list.innerHtml = html
@@ -86,7 +83,31 @@ if (searchHistory.length) {
   displayWeather(searchHistory[searchHistory.length - 1])
 }
 
-document.getElementById('delete').addEventListener('click', => {
-  searchHistory[]
+document.getElementById('delete').addEventListener('click', function () {
   
+  searchHistory = []
+localStorage.setItem('weatherSearchHistory', JSON.stringify(searchHistory))
+displaySearchHistory()
+})
+
+document.getElementById('search').addEventListener('click', function () {
+  event.preventDefault()
+  if (search !== '') {
+    if (searchHistory.length > 10) {
+      searchHistory.splice(0, 1)
+    }
+    searchHistory.push(search.textContent)
+    localStorage.setItem('weatherSearchHistory', JSON.stringify(searchHistory))
+    displaySearchHistory()
+    displayWeather(search.value)
+    search.value = ''
+  }
+})
+
+document.addEventListener('click', (event) =>{
+  event.preventDefault()
+  let target = event.target
+  if (target.classList.contains('btn-outline-secondary')) {
+    displayWeather(target.value)
+  }
 })
