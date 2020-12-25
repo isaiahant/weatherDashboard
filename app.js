@@ -44,7 +44,7 @@ document.getElementById('search').addEventListener('click', function () {
          html = ''
         })
     })
-    .catch(err => console.error(err));
+    .catch(Error => console.error(Error));
 })
 
 
