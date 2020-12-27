@@ -74,7 +74,7 @@ const displaySearchHistory = () => {
     <button type= "button" class="btn btn-outline-secondary" value="${searchHistory[i]}">${searchHistory[i]}</button>
     </li>`
   }
-  list.append(html)
+  list.innerHTML = html
 }
 
 displaySearchHistory()
@@ -110,6 +110,7 @@ document.addEventListener('click', (event) =>{
   event.preventDefault()
   let target = event.target
   if (target.classList.contains('btn-outline-secondary')) {
-    displayWeather(target.value)
+    document.getElementById('inputPassword2').value = target.value
+    displayWeather()
   }
 })
