@@ -102,8 +102,8 @@ document.getElementById('search').addEventListener('click', function () {
     localStorage.setItem('weatherSearchHistory', JSON.stringify(searchHistory))
     displaySearchHistory()
     displayWeather(search)
-    search = ''
   }
+  search = ''
 })
 
 document.addEventListener('click', (event) =>{
