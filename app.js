@@ -1,5 +1,4 @@
 // variables
-let search = document.getElementById('inputPassword2').value
 
 let searchHistory = JSON.parse(localStorage.getItem('weatherSearchHistory'))
 if (searchHistory === null) {
@@ -19,26 +18,27 @@ const getUVIndexRange = (val) => {
 }
 
 const displayWeather = (city) => {
-
   
-  axios.get(`api.openweathermap.org/data/2.5/weather?q=${city}&appid=7405e1a609d490d0a6b23e2a2070ceea`)
+  axios.get('https://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=7405e1a609d490d0a6b23e2a2070ceea&units=imperial')
+  
   .then(res => {
     let city = res.name
     let data = res.data
     
-    axios.get(`https://api.openweathermap.org/data/2.5/onecall?lat=${data.coord.lat}&lon=${data.coord.lon}&units=imperial&appid=7405e1a609d490d0a6b23e2a2070ceean`)
+    axios.get(`https://api.openweathermap.org/data/2.5/onecall?lat=${data.coord.lat}&lon=${data.coord.lon}&units=imperial&appid=7405e1a609d490d0a6b23e2a2070ceea`)
     .then(res => {
+      let search = document.getElementById('inputPassword2').value
       let data = res.data
       console.log(data)
       let current = data.current
       let unixTimeStamp = current.dt
       let date = new Date(unixTimeStamp * 1000)
-      let html = `<h1>${city} (${date.getMonth()}/${date.getDate()}/${date.getFullYear()})<img src="https://openweathermap.org/img/wn/${current.weather[0].icon}@2x.png" alt="${current.weather[0].icon}@2x.png">
+      let html = `<h1> ${search} (${date.getMonth()}/${date.getDate()}/${date.getFullYear()})<img src="https://openweathermap.org/img/wn/${current.weather[0].icon}@2x.png" alt="${current.weather[0].icon}@2x.png">
       </h1>
-        <p>Temperature: ${current.temp} °F</p>
-        <p>Humidity: ${current.humidity}%</p>
-        <p>Wind Speed: ${current.wind_speed} MPH</p>
-        <p>UV Index: <span class="uvi uvi-${getUVIndexRange(current.uvi)}">${current.uvi}</span></p>`
+      <p>Temperature: ${current.temp} °F</p>
+      <p>Humidity: ${current.humidity}%</p>
+      <p>Wind Speed: ${current.wind_speed} MPH</p>
+      <p>UV Index: <span class="uvi uvi-${getUVIndexRange(current.uvi)}">${current.uvi}</span></p>`
       document.getElementById('currentWeather').innerHTML = html
       html = ''
       
@@ -74,7 +74,7 @@ const displaySearchHistory = () => {
     <button type= "button" class="btn btn-outline-secondary" value="${searchHistory[i]}">${searchHistory[i]}</button>
     </li>`
   }
-  list.innerHtml = html
+  list.append(html)
 }
 
 displaySearchHistory()
@@ -86,21 +86,23 @@ if (searchHistory.length) {
 document.getElementById('delete').addEventListener('click', function () {
   
   searchHistory = []
-localStorage.setItem('weatherSearchHistory', JSON.stringify(searchHistory))
-displaySearchHistory()
+  localStorage.setItem('weatherSearchHistory', JSON.stringify(searchHistory))
+  displaySearchHistory()
 })
 
 document.getElementById('search').addEventListener('click', function () {
   event.preventDefault()
+  let search = document.getElementById('inputPassword2').value
+  console.log(search);
   if (search !== '') {
     if (searchHistory.length > 10) {
       searchHistory.splice(0, 1)
     }
-    searchHistory.push(search.textContent)
+    searchHistory.push(search)
     localStorage.setItem('weatherSearchHistory', JSON.stringify(searchHistory))
     displaySearchHistory()
-    displayWeather(search.value)
-    search.value = ''
+    displayWeather(search)
+    search = ''
   }
 })
 
